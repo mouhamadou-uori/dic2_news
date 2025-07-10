@@ -1,7 +1,8 @@
 <?php
 define("DB_HOST", "localhost");
 define("DB_NAME", "dic_news");
-define("DB_USER", "mglsi_user");
+// define("DB_NAME", "mglsi_news");
+define("DB_USER", "wally");
 define("DB_PASS", "passer");
 
 function getDbConnection() {

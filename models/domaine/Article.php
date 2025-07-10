@@ -36,6 +36,21 @@ class Article {
         return $this->categorie_nom;
     }
     
+    public function getSummary($maxLength = 200) {
+        if (strlen($this->contenu) <= $maxLength) {
+            return $this->contenu;
+        }
+        
+        $summary = substr($this->contenu, 0, $maxLength);
+        $lastSpace = strrpos($summary, ' ');
+        
+        if ($lastSpace !== false) {
+            $summary = substr($summary, 0, $lastSpace);
+        }
+        
+        return $summary . '...';
+    }
+    
     public function setId($id) {
         $this->id = $id;
         return $this;
@@ -107,6 +122,21 @@ class Article {
         }
         
         return $articles;
+    }
+    
+    public function getAllPaginated($limit, $offset, $categoryId = null) {
+        $articlesData = $this->articleDao->getAllPaginated($limit, $offset, $categoryId);
+        $articles = [];
+        
+        foreach ($articlesData as $articleData) {
+            $articles[] = self::fromArray($articleData);
+        }
+        
+        return $articles;
+    }
+    
+    public function getTotalCount($categoryId = null) {
+        return $this->articleDao->getTotalCount($categoryId);
     }
 }
 ?>

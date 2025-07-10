@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Pagination</title>
+    <link rel="stylesheet" href="public/css/style.css?v=<?php echo time(); ?>">
+</head>
+<body>
+    <div class="container">
+        <h1>Test des boutons de pagination</h1>
+        
+        <!-- Test de pagination -->
+        <div class="pagination">
+            <div class="pagination-info">
+                <p>Page 1 sur 3 (5 articles au total)</p>
+            </div>
+            
+            <div class="pagination-controls">
+                <span class="btn-pagination btn-previous disabled">
+                    <span>Précédent</span>
+                </span>
+                
+                <span class="pagination-current">
+                    <span>Page 1</span>
+                </span>
+                
+                <a href="#" class="btn-pagination btn-next">
+                    <span>Suivant</span>
+                </a>
+            </div>
+        </div>
+        
+        <br><br>
+        
+        <!-- Test avec boutons actifs -->
+        <div class="pagination">
+            <div class="pagination-info">
+                <p>Page 2 sur 3 (5 articles au total)</p>
+            </div>
+            
+            <div class="pagination-controls">
+                <a href="#" class="btn-pagination btn-previous">
+                    <span>Précédent</span>
+                </a>
+                
+                <span class="pagination-current">
+                    <span>Page 2</span>
+                </span>
+                
+                <a href="#" class="btn-pagination btn-next">
+                    <span>Suivant</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
