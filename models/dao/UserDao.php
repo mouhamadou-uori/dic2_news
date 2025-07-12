@@ -1,5 +1,5 @@
 <?php
-require_once 'models/domaine/User.php';
+require_once __DIR__ . '/../../models/domaine/User.php';
 
 class UserDao {
     private $db;

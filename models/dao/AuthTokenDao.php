@@ -1,5 +1,5 @@
 <?php
-require_once 'models/domaine/AuthToken.php';
+require_once __DIR__ . '/../../models/domaine/AuthToken.php';
 
 class AuthTokenDao {
     private $db;

@@ -1,5 +1,5 @@
 <?php
-require_once 'models/domaine/Category.php';
+require_once __DIR__ . '/../../models/domaine/Category.php';
 
 class CategorieDao {
     private $db;
