@@ -27,7 +27,7 @@
                     <div class="contenu-summary">
                         <p><?php echo nl2br(htmlspecialchars($article->getSummary())); ?></p>
                     </div>
-                    <a href="index.php?controller=article&action=view&id=<?php echo $article->getId(); ?>" class="lire-plus">Lire l'article complet</a>
+                    <a href="index.php?page=article&action=view&id=<?php echo $article->getId(); ?>" class="lire-plus">Lire l'article complet</a>
                 </article>
             <?php endforeach; ?>
         </div>

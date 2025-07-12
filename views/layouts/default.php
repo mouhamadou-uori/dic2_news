@@ -9,8 +9,26 @@
 <body>
     <div class="container">
         <header>
-            <h1>MGLSI News</h1>
-            <p>Votre source d'actualités quotidiennes</p>
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>MGLSI News</h1>
+                    <p>Votre source d'actualités quotidiennes</p>
+                </div>
+                <div class="auth-buttons">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <div class="user-info">
+                            <span class="welcome-text">Bienvenue, <?php echo htmlspecialchars($_SESSION['nom_complet']); ?></span>
+                            <?php if ($_SESSION['role'] === 'editeur' || $_SESSION['role'] === 'administrateur'): ?>
+                                <a href="index.php?page=admin" class="btn-auth btn-admin">Administration</a>
+                            <?php endif; ?>
+                            <a href="index.php?page=logout" class="btn-auth btn-logout">Déconnexion</a>
+                        </div>
+                    <?php else: ?>
+                        <a href="index.php?page=login" class="btn-auth btn-login">Connexion</a>
+                        <a href="index.php?page=register" class="btn-auth btn-register">Inscription</a>
+                    <?php endif; ?>
+                </div>
+            </div>
         </header>
         
         <nav>
