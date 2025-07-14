@@ -14,4 +14,3 @@ function getDbConnection() {
         die("Erreur de connexion : " . $e->getMessage());
     }
 }
-?>

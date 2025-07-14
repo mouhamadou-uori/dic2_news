@@ -1,4 +1,11 @@
 <?php
+// Désactiver l'affichage des erreurs pour garantir une sortie SOAP propre
+ini_set('display_errors', 0);
+error_reporting(0);
+
+// Démarrer le tampon de sortie pour capturer toute sortie inattendue
+ob_start();
+
 // Démarrer la session
 session_start();
 
@@ -8,6 +15,7 @@ require_once '../models/dao/UserDao.php';
 require_once '../models/dao/AuthTokenDao.php';
 require_once '../models/domaine/User.php';
 require_once '../models/domaine/AuthToken.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php'; // Inclure l'autoloader de Composer
 
 // Fonction pour vérifier la validité du token
 function validateToken($token) {
@@ -313,189 +321,45 @@ class UserService {
     }
 }
 
-// Configurer le serveur SOAP
+// Définir l'URI du service de manière dynamique
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'];
+$scriptName = $_SERVER['SCRIPT_NAME'];
+$uri = "$protocol://$host$scriptName";
+
+// Gérer la requête WSDL
+if (isset($_GET['wsdl'])) {
+    // Nettoyer le tampon de sortie pour s'assurer qu'aucun contenu parasite n'est envoyé
+    ob_end_clean();
+
+    // Utiliser laminas-soap pour générer le WSDL automatiquement
+    $autodiscover = new Laminas\Soap\AutoDiscover();
+    $autodiscover->setClass('UserService')
+                 ->setUri($uri);
+    
+    header('Content-Type: application/wsdl+xml');
+    echo $autodiscover->toXml();
+    exit;
+}
+
+// Gérer les requêtes SOAP normales
 $options = [
-    'uri' => 'http://localhost/dic2_news/api/soap_users.php',
+    'uri' => $uri,
     'soap_version' => SOAP_1_2,
     'encoding' => 'UTF-8',
     'exceptions' => true
 ];
 
-// Vérifier si c'est une requête WSDL
-if (isset($_GET['wsdl'])) {
-    // Rediriger vers le fichier WSDL statique
-    header('Location: soap_users_wsdl.php');
-    exit;
-}
-
-// Créer le serveur SOAP
-$server = new SoapServer(null, $options);
+// Le WSDL est l'URL du service lui-même avec '?wsdl' en paramètre
+$server = new SoapServer($uri . '?wsdl', $options);
 $server->setClass('UserService');
 
-// Gérer la requête
-$server->handle();
+try {
+    $server->handle();
+} catch (SoapFault $f) {
+    error_log($f->getMessage());
+    $server->fault($f->faultcode, $f->faultstring);
+}
 
-/**
- * Classe simple pour générer un WSDL
- */
-class WSDLGenerator {
-    public function generate($className, $namespace) {
-        // En-têtes pour le XML
-        header('Content-Type: text/xml; charset=utf-8');
-        
-        // Générer le WSDL sans utiliser de concaténation pour éviter les problèmes
-        echo '<?xml version="1.0" encoding="UTF-8"?>
-<definitions name="' . $className . '" targetNamespace="' . $namespace . '" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="' . $namespace . '" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
-    <types>
-        <xsd:schema targetNamespace="' . $namespace . '">
-            <xsd:complexType name="User">
-                <xsd:all>
-                    <xsd:element name="id" type="xsd:int"/>
-                    <xsd:element name="username" type="xsd:string"/>
-                    <xsd:element name="email" type="xsd:string"/>
-                    <xsd:element name="nom" type="xsd:string"/>
-                    <xsd:element name="prenom" type="xsd:string"/>
-                    <xsd:element name="role" type="xsd:string"/>
-                    <xsd:element name="dateCreation" type="xsd:string" minOccurs="0"/>
-                    <xsd:element name="dateModification" type="xsd:string" minOccurs="0"/>
-                    <xsd:element name="actif" type="xsd:boolean" minOccurs="0"/>
-                    <xsd:element name="derniereConnexion" type="xsd:string" minOccurs="0"/>
-                </xsd:all>
-            </xsd:complexType>
-            <xsd:complexType name="ArrayOfUsers">
-                <xsd:complexContent>
-                    <xsd:restriction base="soapenc:Array">
-                        <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="tns:User[]"/>
-                    </xsd:restriction>
-                </xsd:complexContent>
-            </xsd:complexType>
-        </xsd:schema>
-    </types>
-    
-    <message name="listUsersRequest">
-        <part name="token" type="xsd:string"/>
-    </message>
-    <message name="listUsersResponse">
-        <part name="return" type="tns:ArrayOfUsers"/>
-    </message>
-    
-    <message name="getUserRequest">
-        <part name="token" type="xsd:string"/>
-        <part name="userId" type="xsd:int"/>
-    </message>
-    <message name="getUserResponse">
-        <part name="return" type="tns:User"/>
-    </message>
-    
-    <message name="createUserRequest">
-        <part name="token" type="xsd:string"/>
-        <part name="username" type="xsd:string"/>
-        <part name="email" type="xsd:string"/>
-        <part name="password" type="xsd:string"/>
-        <part name="nom" type="xsd:string"/>
-        <part name="prenom" type="xsd:string"/>
-        <part name="role" type="xsd:string"/>
-    </message>
-    <message name="createUserResponse">
-        <part name="return" type="xsd:int"/>
-    </message>
-    
-    <message name="updateUserRequest">
-        <part name="token" type="xsd:string"/>
-        <part name="userId" type="xsd:int"/>
-        <part name="username" type="xsd:string"/>
-        <part name="email" type="xsd:string"/>
-        <part name="nom" type="xsd:string"/>
-        <part name="prenom" type="xsd:string"/>
-        <part name="role" type="xsd:string"/>
-        <part name="password" type="xsd:string"/>
-    </message>
-    <message name="updateUserResponse">
-        <part name="return" type="xsd:boolean"/>
-    </message>
-    
-    <message name="deleteUserRequest">
-        <part name="token" type="xsd:string"/>
-        <part name="userId" type="xsd:int"/>
-    </message>
-    <message name="deleteUserResponse">
-        <part name="return" type="xsd:boolean"/>
-    </message>
-    
-    <message name="authenticateRequest">
-        <part name="username" type="xsd:string"/>
-        <part name="password" type="xsd:string"/>
-    </message>
-    <message name="authenticateResponse">
-        <part name="return" type="tns:User"/>
-    </message>
-    
-    <portType name="' . $className . 'PortType">
-        <operation name="listUsers">
-            <input message="tns:listUsersRequest"/>
-            <output message="tns:listUsersResponse"/>
-        </operation>
-        <operation name="getUser">
-            <input message="tns:getUserRequest"/>
-            <output message="tns:getUserResponse"/>
-        </operation>
-        <operation name="createUser">
-            <input message="tns:createUserRequest"/>
-            <output message="tns:createUserResponse"/>
-        </operation>
-        <operation name="updateUser">
-            <input message="tns:updateUserRequest"/>
-            <output message="tns:updateUserResponse"/>
-        </operation>
-        <operation name="deleteUser">
-            <input message="tns:deleteUserRequest"/>
-            <output message="tns:deleteUserResponse"/>
-        </operation>
-        <operation name="authenticate">
-            <input message="tns:authenticateRequest"/>
-            <output message="tns:authenticateResponse"/>
-        </operation>
-    </portType>
-    
-    <binding name="' . $className . 'Binding" type="tns:' . $className . 'PortType">
-        <soap12:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="listUsers">
-            <soap12:operation soapAction="' . $namespace . '#listUsers"/>
-            <input><soap12:body use="encoded" namespace="' . $namespace . '" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
-            <output><soap12:body use="encoded" namespace="' . $namespace . '" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
-        </operation>
-        <operation name="getUser">
-            <soap12:operation soapAction="' . $namespace . '#getUser"/>
-            <input><soap12:body use="encoded" namespace="' . $namespace . '" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
-            <output><soap12:body use="encoded" namespace="' . $namespace . '" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
-        </operation>
-        <operation name="createUser">
-            <soap12:operation soapAction="' . $namespace . '#createUser"/>
-            <input><soap12:body use="encoded" namespace="' . $namespace . '" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
-            <output><soap12:body use="encoded" namespace="' . $namespace . '" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
-        </operation>
-        <operation name="updateUser">
-            <soap12:operation soapAction="' . $namespace . '#updateUser"/>
-            <input><soap12:body use="encoded" namespace="' . $namespace . '" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
-            <output><soap12:body use="encoded" namespace="' . $namespace . '" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
-        </operation>
-        <operation name="deleteUser">
-            <soap12:operation soapAction="' . $namespace . '#deleteUser"/>
-            <input><soap12:body use="encoded" namespace="' . $namespace . '" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
-            <output><soap12:body use="encoded" namespace="' . $namespace . '" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
-        </operation>
-        <operation name="authenticate">
-            <soap12:operation soapAction="' . $namespace . '#authenticate"/>
-            <input><soap12:body use="encoded" namespace="' . $namespace . '" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
-            <output><soap12:body use="encoded" namespace="' . $namespace . '" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
-        </operation>
-    </binding>
-    
-    <service name="' . $className . 'Service">
-        <port name="' . $className . 'Port" binding="tns:' . $className . 'Binding">
-            <soap12:address location="' . $namespace . '"/>
-        </port>
-    </service>
-</definitions>';
-    }
-} 
+// Envoyer le contenu du tampon et le désactiver
+ob_end_flush();

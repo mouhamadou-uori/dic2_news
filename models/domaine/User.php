@@ -148,5 +148,4 @@ class User {
         
         return $user;
     }
-}
-?> 
+}

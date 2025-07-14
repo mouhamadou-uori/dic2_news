@@ -106,5 +106,4 @@ class AuthTokenDao {
         $stmt->execute();
         return (int)$stmt->fetchColumn() > 0;
     }
-}
-?>
+}
