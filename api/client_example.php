@@ -34,7 +34,7 @@ try {
     
     // Pour les exemples suivants, nous avons besoin d'un jeton d'authentification
     // Normalement, ce jeton serait généré par un administrateur depuis l'interface d'administration
-    $token = "votre_jeton_d_authentification"; // Remplacer par un vrai jeton
+    $token = "f98dc1fe18c2ca9c11d7758bc97e476b345da7a5c2cff65040ffc3f1e7acb931"; // Remplacer par un vrai jeton
     
     // 2. Lister tous les utilisateurs
     echo "<h2>2. Lister tous les utilisateurs</h2>";

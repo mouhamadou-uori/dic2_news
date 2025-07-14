@@ -323,8 +323,9 @@ $options = [
 
 // Vérifier si c'est une requête WSDL
 if (isset($_GET['wsdl'])) {
-    // Rediriger vers le fichier WSDL statique
-    header('Location: soap_users_wsdl.php');
+    // Générer le WSDL
+    $wsdlGenerator = new WSDLGenerator();
+    $wsdlGenerator->generate('UserService', $options['uri']);
     exit;
 }
 
@@ -343,9 +344,17 @@ class WSDLGenerator {
         // En-têtes pour le XML
         header('Content-Type: text/xml; charset=utf-8');
         
-        // Générer le WSDL sans utiliser de concaténation pour éviter les problèmes
-        echo '<?xml version="1.0" encoding="UTF-8"?>
-<definitions name="' . $className . '" targetNamespace="' . $namespace . '" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="' . $namespace . '" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+        // Générer le WSDL complet en une seule fois pour éviter les problèmes de formatage XML
+        $wsdl = '<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="' . $className . '" 
+            targetNamespace="' . $namespace . '" 
+            xmlns="http://schemas.xmlsoap.org/wsdl/" 
+            xmlns:tns="' . $namespace . '" 
+            xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+            xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+            xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+            xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
     <types>
         <xsd:schema targetNamespace="' . $namespace . '">
             <xsd:complexType name="User">
@@ -497,5 +506,8 @@ class WSDLGenerator {
         </port>
     </service>
 </definitions>';
+        
+        // Afficher le WSDL
+        echo $wsdl;
     }
 } 
