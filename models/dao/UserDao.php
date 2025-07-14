@@ -29,14 +29,22 @@ class UserDao {
     public function create($username, $email, $password, $nom, $prenom, $role = 'visiteur') {
         $query = "INSERT INTO User (username, email, password, nom, prenom, role) 
                   VALUES (:username, :email, :password, :nom, :prenom, :role)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->bindParam(':password', password_hash($password, PASSWORD_DEFAULT), PDO::PARAM_STR);
-        $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
-        $stmt->bindParam(':prenom', $prenom, PDO::PARAM_STR);
-        $stmt->bindParam(':role', $role, PDO::PARAM_STR);
-        return $stmt->execute();
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+            $stmt->bindParam(':nom', $nom, PDO::PARAM_STR);
+            $stmt->bindParam(':prenom', $prenom, PDO::PARAM_STR);
+            $stmt->bindParam(':role', $role, PDO::PARAM_STR);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            // En cas d'erreur SQL (contrainte, etc.), retourner false
+            // On pourrait logger l'erreur ici pour le débogage côté serveur
+            // error_log($e->getMessage());
+            return false;
+        }
     }
     
     public function update($id, $username, $email, $nom, $prenom, $role, $password = null) {

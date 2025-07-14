@@ -155,15 +155,17 @@ class UserService {
                 throw new SoapFault('INVALID_ROLE', 'Rôle invalide. Les valeurs acceptées sont: ' . implode(', ', $validRoles));
             }
             
-            // Créer l'utilisateur
-            $result = $this->userDao->create($username, $email, $password, $nom, $prenom, $role);
-            
-            if (!$result) {
-                throw new SoapFault('CREATE_ERROR', 'Erreur lors de la création de l\'utilisateur');
+            // Créer l'utilisateur dans la base de données
+            $success = $this->userDao->create($username, $email, $password, $nom, $prenom, $role);
+            if (!$success) {
+                throw new SoapFault('DB_ERROR', 'La création de l\'utilisateur a échoué au niveau de la base de données.');
             }
             
             // Récupérer l'ID du nouvel utilisateur
             $user = $this->userDao->getByUsername($username);
+            if (!$user) {
+                throw new SoapFault('FETCH_ERROR', 'Impossible de récupérer l\'utilisateur après sa création.');
+            }
             return $user->getId();
         } catch (SoapFault $e) {
             throw $e;

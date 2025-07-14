@@ -61,10 +61,12 @@ try {
     
     // 4. Créer un nouvel utilisateur
     echo "<h2>4. Créer un nouvel utilisateur</h2>";
+    $newUserId = null; // Initialiser pour la vérification ultérieure
     try {
+        $uniqueId = uniqid(); // Génère un identifiant unique
         $newUser = [
-            'username' => 'nouvel_utilisateur',
-            'email' => 'nouvel.utilisateur@example.com',
+            'username' => 'user_' . $uniqueId,
+            'email' => 'user.' . $uniqueId . '@example.com',
             'password' => 'mot_de_passe_securise',
             'nom' => 'Utilisateur',
             'prenom' => 'Nouveau',
@@ -121,18 +123,20 @@ try {
     
     // 6. Supprimer un utilisateur
     echo "<h2>6. Supprimer un utilisateur</h2>";
-    try {
-        $userIdToDelete = 3; // ID de l'utilisateur à supprimer
-        
-        $deleteResult = $client->deleteUser($token, $userIdToDelete);
-        
-        if ($deleteResult) {
-            echo "<div style='color: green;'>Utilisateur supprimé avec succès</div>";
-        } else {
-            echo "<div style='color: orange;'>Aucune suppression effectuée</div>";
+    if ($newUserId) {
+        try {
+            $deleteResult = $client->deleteUser($token, $newUserId);
+            
+            if ($deleteResult) {
+                echo "<div style='color: green;'>Utilisateur (ID: {$newUserId}) supprimé avec succès</div>";
+            } else {
+                echo "<div style='color: orange;'>Aucune suppression effectuée pour l'utilisateur (ID: {$newUserId})</div>";
+            }
+        } catch (SoapFault $e) {
+            echo "<div style='color: red;'>Erreur lors de la suppression de l'utilisateur (ID: {$newUserId}) : " . $e->getMessage() . "</div>";
         }
-    } catch (SoapFault $e) {
-        echo "<div style='color: red;'>Erreur lors de la suppression de l'utilisateur : " . $e->getMessage() . "</div>";
+    } else {
+        echo "<div style='color: blue;'>Suppression ignorée car la création de l'utilisateur a échoué.</div>";
     }
     
     // Afficher les requêtes et réponses SOAP pour le débogage
