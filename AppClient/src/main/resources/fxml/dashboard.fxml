@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/11.0.1" 
+           fx:controller="com.newsapp.client.controller.DashboardController" 
+           xmlns:fx="http://javafx.com/fxml/1" 
+           styleClass="dashboard-root">
+   <children>
+      <VBox fx:id="dashboardContainer" alignment="TOP_CENTER" spacing="32.0" maxWidth="1200" 
+            style="-fx-padding: 40 24 40 24;">
+         <children>
+            <VBox alignment="TOP_LEFT" spacing="24.0" maxWidth="1100" styleClass="dashboard-header">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="20.0">
+                     <children>
+                        <VBox spacing="12.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="dashboard-title" text="DIC2_NEWS - Tableau de bord" />
+                              <Label styleClass="dashboard-subtitle" 
+                                     text="Gérez vos utilisateurs, permissions et accès dans un espace moderne et sécurisé." />
+                           </children>
+                        </VBox>
+                        <Button text="Déconnexion" 
+                                styleClass="dashboard-button-logout" 
+                                onAction="#handleLogout" 
+                                prefWidth="160" 
+                                prefHeight="40" />
+                     </children>
+                  </HBox>
+
+                  <HBox spacing="28.0" alignment="CENTER_LEFT">
+                     <children>
+                        <VBox styleClass="dashboard-stat-card" 
+                              alignment="CENTER_LEFT" 
+                              spacing="16.0" 
+                              maxWidth="340" 
+                              minWidth="280">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" spacing="20.0">
+                                 <children>
+                                    <VBox alignment="CENTER_LEFT" spacing="8.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Utilisateurs totaux" styleClass="dashboard-stat-label" />
+                                          <Label fx:id="totalUsersLabel" text="5" styleClass="dashboard-stat-value" />
+                                       </children>
+                                    </VBox>
+                                    <Label styleClass="dashboard-stat-icon" text="👥" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+
+                        <VBox styleClass="dashboard-stat-card" 
+                              alignment="CENTER_LEFT" 
+                              spacing="16.0" 
+                              maxWidth="340" 
+                              minWidth="280">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" spacing="20.0">
+                                 <children>
+                                    <VBox alignment="CENTER_LEFT" spacing="8.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Sessions actives" styleClass="dashboard-stat-label" />
+                                          <Label fx:id="activeSessionsLabel" text="4" styleClass="dashboard-stat-value" />
+                                       </children>
+                                    </VBox>
+                                    <Label styleClass="dashboard-stat-icon" text="⚡" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+
+                        <VBox styleClass="dashboard-stat-card" 
+                              alignment="CENTER_LEFT" 
+                              spacing="16.0" 
+                              maxWidth="340" 
+                              minWidth="280">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" spacing="20.0">
+                                 <children>
+                                    <VBox alignment="CENTER_LEFT" spacing="8.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label text="Répartition des rôles" styleClass="dashboard-stat-label" />
+                                          <Label fx:id="roleDistributionLabel" text="3" styleClass="dashboard-stat-value" />
+                                       </children>
+                                    </VBox>
+                                    <Label styleClass="dashboard-stat-icon" text="🛡️" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+
+            <VBox alignment="TOP_LEFT" spacing="20.0" maxWidth="1100" styleClass="dashboard-activity-section">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="20.0">
+                     <children>
+                        <Label text="Liste Utilisateurs" styleClass="dashboard-section-title" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="searchField" 
+                                   promptText="Rechercher un utilisateur..." 
+                                   styleClass="dashboard-search" 
+                                   prefWidth="280" 
+                                   prefHeight="40" />
+                     </children>
+                  </HBox>
+
+                  <TableView fx:id="usersTable" 
+                             styleClass="dashboard-table" 
+                             prefHeight="380" 
+                             maxWidth="1100">
+                     <columns>
+                        <TableColumn fx:id="userColumn" text="Utilisateur" prefWidth="300" />
+                        <TableColumn fx:id="statusColumn" text="Statut" prefWidth="180" />
+                        <TableColumn fx:id="roleColumn" text="Rôle" prefWidth="220" />
+                        <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="200" />
+                     </columns>
+                  </TableView>
+               </children>
+            </VBox>
+
+            <HBox alignment="CENTER" spacing="24.0" maxWidth="1100">
+               <children>
+                  <Button text="+ Créer un utilisateur" 
+                          styleClass="dashboard-button-primary" 
+                          prefWidth="280" 
+                          prefHeight="45" 
+                          onAction="#handleAddUser" />
+                  <Button text="Actualiser" 
+                          styleClass="dashboard-button-secondary" 
+                          prefWidth="160" 
+                          prefHeight="45" 
+                          onAction="#handleRefresh" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</StackPane>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.newsapp.client.controller.LoginController" style="-fx-background-color: linear-gradient(135deg, #181c2f 0%, #232946 100%); -fx-min-height: 100vh;">
+   <children>
+      <VBox alignment="CENTER" spacing="0" style="-fx-background-color: linear-gradient(135deg, #181c2f 0%, #232946 100%); -fx-min-height: 100vh; -fx-background-color: #181c2f;
+  -fx-border-color: #1a6cff;  -fx-border-width: 2px;">
+         <children>
+            <VBox fx:id="loginContainer" alignment="CENTER" maxWidth="420.0" minWidth="380.0" spacing="28.0" styleClass="login-card">
+               <children>
+                  <HBox alignment="TOP_RIGHT">
+                     <children>
+                        <Button fx:id="closeButton" styleClass="close-btn" text="✕" onAction="#handleClose" />
+                     </children>
+                  </HBox>
+                  <VBox alignment="CENTER" spacing="6.0">
+                     <children>
+                        <Label styleClass="login-title" text="DIC2_NEWS">
+                           <font><Font name="System Bold" size="28.0" /></font>
+                        </Label>
+                        <Label styleClass="login-subtitle" text="Entrez vos identifiants">
+                           <font><Font size="15.0" /></font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox spacing="18.0" maxWidth="320">
+                     <children>
+                        <VBox spacing="7.0">
+                           <children>
+                              <Label styleClass="login-label" text="Nom d'utilisateur">
+                                 <font><Font size="13.0" /></font>
+                              </Label>
+                              <TextField fx:id="usernameField" promptText="Entrez votre nom d'utilisateur" styleClass="login-field" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="7.0">
+                           <children>
+                              <Label styleClass="login-label" text="Mot de passe">
+                                 <font><Font size="13.0" /></font>
+                              </Label>
+                              <PasswordField fx:id="passwordField" promptText="Entrez votre mot de passe" styleClass="login-field" GridPane.columnIndex="0" />
+                                  
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <VBox spacing="16.0" maxWidth="320">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="0" style="-fx-pref-width: 100%;">
+                           <children>
+                              <CheckBox fx:id="rememberMeCheckBox" text="Se souvenir de moi" styleClass="login-remember" />
+                              <Region HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin" styleClass="login-button" text="Connexion" prefWidth="Infinity" />
+                     </children>
+                  </VBox>
+                  <Label fx:id="errorLabel" styleClass="login-error" visible="false" alignment="CENTER" />
+               </children>
+               <padding>
+                  <Insets bottom="38.0" left="38.0" right="38.0" top="38.0" />
+               </padding>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</StackPane>

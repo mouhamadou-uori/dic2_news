@@ -1,0 +1,104 @@
+.login-card {
+  -fx-background-color: #181c2f;
+  -fx-effect: dropshadow(gaussian, #1a6cff33, 24, 0.2, 0, 2);
+  -fx-padding: 38px 38px 38px 38px;
+  -fx-spacing: 28px;
+}
+.login-title {
+  -fx-font-family: "Segoe UI", "Roboto", sans-serif;
+  -fx-font-size: 2em;
+  -fx-font-weight: bold;
+  -fx-text-fill: #fff;
+  -fx-effect: dropshadow(gaussian, #1a6cff, 6, 0.2, 0, 1);
+}
+.login-subtitle {
+  -fx-font-family: "Segoe UI", "Roboto", sans-serif;
+  -fx-font-size: 1em;
+  -fx-text-fill: #b0b8d0;
+  -fx-padding: 0 0 8px 0;
+}
+.login-label {
+  -fx-font-family: "Segoe UI", "Roboto", sans-serif;
+  -fx-font-size: 1em;
+  -fx-text-fill: #b0b8d0;
+  -fx-font-weight: 600;
+}
+.login-field {
+  -fx-background-color: #181c2f;
+  -fx-border-color: #2a3550;
+  -fx-border-width: 1.5px;
+  -fx-border-radius: 10px;
+  -fx-background-radius: 10px;
+  -fx-padding: 12px 16px;
+  -fx-font-size: 1em;
+  -fx-text-fill: #fff;
+  -fx-prompt-text-fill: #6c7a96;
+  -fx-effect: dropshadow(gaussian, #1a6cff22, 4, 0.1, 0, 1);
+}
+.login-field:focused {
+  -fx-border-color: #1a6cff;
+  -fx-effect: dropshadow(gaussian, #1a6cff99, 8, 0.2, 0, 2);
+}
+.eye-button {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-cursor: hand;
+  -fx-padding: 0 8px 0 8px;
+}
+.login-remember {
+  -fx-text-fill: #b0b8d0;
+  -fx-font-size: 1em;
+}
+.login-link {
+  -fx-text-fill: #3bb2ff;
+  -fx-font-size: 1em;
+  -fx-font-weight: 600;
+  -fx-padding: 0 0 0 0;
+}
+.login-link:hover {
+  -fx-text-fill: #1a6cff;
+  -fx-underline: true;
+}
+.login-button {
+  -fx-background-color: #1a6cff;
+  -fx-text-fill: #fff;
+  -fx-font-size: 1.2em;
+  -fx-font-weight: bold;
+  -fx-background-radius: 18px;
+  -fx-padding: 18px 0;
+  -fx-cursor: hand;
+  -fx-effect: dropshadow(gaussian, #1a6cff55, 14, 0.2, 0, 2);
+  -fx-pref-width: 360px;
+  -fx-alignment: center;
+  -fx-border-width: 0;
+  -fx-border-color: transparent;
+  -fx-margin: 18px 0 0 0;
+  -fx-translate-x: 0;
+}
+.login-button:hover {
+  -fx-background-color: #181c2f;
+  -fx-effect: dropshadow(gaussian, #3bb2ff99, 20, 0.3, 0, 3);
+}
+.login-error {
+  -fx-text-fill: #ff3576;
+  -fx-font-size: 1em;
+  -fx-font-weight: bold;
+  -fx-padding: 8 0 0 0;
+  -fx-alignment: center;
+}
+.close-btn {
+  -fx-background-color: transparent;
+  -fx-text-fill: #fff;
+  -fx-font-size: 20px;
+  -fx-font-weight: bold;
+  -fx-cursor: hand;
+  -fx-padding: 2 8 2 8;
+  -fx-background-radius: 50%;
+  -fx-effect: dropshadow(gaussian, #1a6cff33, 6, 0.2, 0, 1);
+  -fx-alignment: center-right;
+  -fx-translate-x: 0;
+}
+.close-btn:hover {
+  -fx-background-color: #ff3576;
+  -fx-text-fill: #fff;
+}
